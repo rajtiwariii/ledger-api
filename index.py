@@ -41,11 +41,16 @@ async def ledger_agent(request: Request):
     ans = 0
     try:
         filtered_df = df.copy()
-        for region in ["north", "east", "west", "south", "central"]:
-            if region in question and "region" in filtered_df.columns:
-                filtered_df = filtered_df[filtered_df["region"].str.lower() == region]
-
-        if "revenue" in question or "total" in question:
+        
+        # Keyword checks for questions
+        if "customer" in question or "who" in question or "how many different" in question:
+            if "customer" in filtered_df.columns:
+                ans = int(filtered_df["customer"].nunique())
+            elif "customer_id" in filtered_df.columns:
+                ans = int(filtered_df["customer_id"].nunique())
+            else:
+                ans = len(filtered_df)
+        elif "revenue" in question or "total" in question:
             target_col = "amount" if "amount" in filtered_df.columns else ("price" if "price" in filtered_df.columns else None)
             if target_col:
                 ans = float(filtered_df[target_col].sum())
