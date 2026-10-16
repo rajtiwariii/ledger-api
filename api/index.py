@@ -24,7 +24,6 @@ async def fetch_ledger_data():
             return pd.DataFrame()
 
 @app.api_route("/", methods=["GET", "POST", "OPTIONS"])
-@app.api_route("/answer", methods=["GET", "POST", "OPTIONS"])
 async def ledger_agent(request: Request):
     if request.method == "GET":
         return {"status": "Ledger Agent API is running"}
